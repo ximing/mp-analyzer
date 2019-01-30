@@ -16,8 +16,14 @@ interface IANA {
     run(): Promise<any | void>;
 }
 
+interface IPackage {
+    name: string;
+    path: string;
+    files: File[];
+}
+
 interface PluginMap {
     [name: string]: Plugin;
 }
 
-export { FileMap, IANA, PluginMap };
+export { FileMap, IANA, PluginMap, IPackage };

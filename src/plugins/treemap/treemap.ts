@@ -1,5 +1,5 @@
 import Plugins from '../../interfaces/plugin';
-import { IANA } from '../../interfaces/ana';
+import { IANA, IPackage } from '../../interfaces/ana';
 import Package from '../package';
 import { DiskData } from './model';
 import * as path from 'path';
@@ -16,25 +16,32 @@ export default class Treemap extends Plugins {
         this.output = path.resolve(process.cwd(), output);
     }
 
+    getPackageFileTree(p: IPackage): DiskData {
+        const treeMap: { [name: string]: DiskData } = {};
+        p.files.forEach((file) => {
+            let pathname = file.path.replace(this.ana.mpDir, ''),
+                dirname = file.dirname.replace(this.ana.mpDir, '');
+
+            if (!treeMap[pathname]) {
+                treeMap[pathname] = new DiskData(pathname, pathname, file.stat.size);
+            }
+            if (!treeMap[dirname]) {
+                treeMap[dirname] = new DiskData(dirname, dirname);
+            }
+            treeMap[dirname].children.push(treeMap[pathname]);
+            treeMap[dirname].value += treeMap[pathname].value;
+        });
+        const d = treeMap[p.path.replace(this.ana.mpDir, '')];
+        d.name = p.name;
+        return d;
+    }
+
     async run() {
         const diskData: DiskData[] = [];
         const appPackage = this.ana.getPlugin('package') as Package;
-        const main = new DiskData('主包', this.ana.mpDir);
-        appPackage.mainPackage.forEach((file) => {
-            main.value += file.stat.size;
-            main.children.push(new DiskData(file.basename, file.path, file.stat.size));
-        });
-        diskData.push(main);
+        diskData.push(this.getPackageFileTree(appPackage.mainPackage));
         Object.keys(appPackage.subPackages).forEach((subPackageName) => {
-            const subPackage = new DiskData(
-                appPackage.subPackages[subPackageName].root,
-                this.ana.mpDir
-            );
-            appPackage.subPackages[subPackageName].files.forEach((file) => {
-                subPackage.value += file.stat.size;
-                subPackage.children.push(new DiskData(file.basename, file.path, file.stat.size));
-            });
-            diskData.push(subPackage);
+            diskData.push(this.getPackageFileTree(appPackage.subPackages[subPackageName]));
         });
         const res = nunjucks.render(path.join(__dirname, 'tml.html'), {
             diskData: JSON.stringify(diskData)
