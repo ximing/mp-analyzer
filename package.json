@@ -1,15 +1,19 @@
 {
-  "name": "ana",
+  "name": "@yeanzhi/ana",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "demo": "tsc ./src/bin/index.ts "
+    "demo": "tsc ./src/bin/index.ts ",
+    "publish-pkg": "npm publish --access=public"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "files": [
+    "src","lib"
+  ],
   "devDependencies": {
     "@babel/core": "^7.2.0",
     "prettier": "^1.16.1",
