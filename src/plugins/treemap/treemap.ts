@@ -44,7 +44,7 @@ export default class Treemap extends Plugins {
         Object.keys(appPackage.subPackages).forEach((subPackageName) => {
             this.diskData.push(this.getPackageFileTree(appPackage.subPackages[subPackageName]));
         });
-        const res = nunjucks.render(path.join(__dirname, 'tml.html'), {
+        const res = nunjucks.render(path.join(__dirname, '../../../tml.html'), {
             diskData: JSON.stringify(this.diskData)
         });
         console.log(chalk.green(`输出分析文件到${this.output}`));

@@ -64,3 +64,5 @@ typings/
 
 app
 treemap.html
+
+src/**/*.js

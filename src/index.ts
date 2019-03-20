@@ -12,24 +12,26 @@ import Package from './plugins/package';
 export default class ANA implements IANA {
     appFilePath: string;
     mpDir: string;
+    output: string;
     package: Package;
     fileMap: FileMap;
     plugins: Plugin[];
     pluginMap: PluginMap;
 
     // @params mpDir 小程序路径
-    constructor(mpDir: string) {
+    constructor(mpDir: string, output: string) {
         this.mpDir = path.resolve(process.cwd(), mpDir);
         this.appFilePath = path.join(this.mpDir, 'app.json');
         this.fileMap = {};
         this.plugins = [];
         this.pluginMap = {};
         this.initPlugins();
+        this.output = output || path.join(process.cwd(), 'treemap.html');
     }
 
     initPlugins() {
         this.register(new Package(this));
-        this.register(new TreeMap(this, path.join(process.cwd(), 'treemap.html')));
+        this.register(new TreeMap(this, this.output));
     }
 
     getPlugin(name): Plugin {

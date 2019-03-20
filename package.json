@@ -1,6 +1,6 @@
 {
   "name": "@yeanzhi/ana",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "files": [
-    "src","lib"
+    "src","lib","tml.html"
   ],
   "devDependencies": {
     "@babel/core": "^7.2.0",
