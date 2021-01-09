@@ -1,7 +1,5 @@
 const path = require('path');
-const fse = require('fs-extra');
 const fs = require('fs');
-const chalk = require('chalk');
 const glob = require('glob');
 const Vinyl = require('vinyl');
 import { FileMap, IANA, PluginMap } from './interfaces/ana';
@@ -19,7 +17,7 @@ export default class ANA implements IANA {
     pluginMap: PluginMap;
 
     // @params mpDir 小程序路径
-    constructor(mpDir: string, output: string) {
+    constructor(mpDir: string, output?: string) {
         this.mpDir = path.resolve(process.cwd(), mpDir);
         this.appFilePath = path.join(this.mpDir, 'app.json');
         this.fileMap = {};
